@@ -78,9 +78,12 @@ def load_internship_students():
 
 def display_internships_selection(request):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
-
+    specialities = mdl_internship.internship_speciality.InternshipSpeciality.objects.all()
+    internships_offers = mdl_internship.internship_offer.InternshipOffer.objects.all()
     return render(request, "internships_student_selection.html",
-                  {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1)})
+                  {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
+                   "specialities": specialities,
+                   "internships_offers": internships_offers})
 
 
 @login_required
