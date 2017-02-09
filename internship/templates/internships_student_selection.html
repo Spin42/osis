@@ -39,13 +39,13 @@
     <div class="panel-body">
 
         <div class="row">
-            <form>
+            <form id="select_internship" method="get" action="{% url 'internships_selection' %}">
 
                 <div class="col-md-4 form-group">
                     <label for="internship_type">Internship</label>
                     <select  id="internship_type" class="form-control">
                         {% for non_mandatory_id in number_non_mandatory_internships %}
-                            <option>{% trans 'internship_choice'%} {{ non_mandatory_id }}</option>
+                            <option value="{{ non_mandatory_id }}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -54,7 +54,7 @@
                     <label for="speciality_type">Speciality</label>
                     <select id="speciality_type" class="form-control">
                         {% for speciality in specialities %}
-                            <option>{{ speciality.name }}</option>
+                            <option value="{{ speciality.id }}">{{ speciality.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -72,7 +72,7 @@
 
        <div class="row">
 
-           <form>
+           <form id="assign_preference" method="post">
 
                <table class="table table-striped">
                    <thead>

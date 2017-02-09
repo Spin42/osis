@@ -76,6 +76,8 @@ def load_internship_students():
         print("Duplication : {}".format(duplication_counter))
 
 
+@login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 def display_internships_selection(request):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
     specialities = mdl_internship.internship_speciality.InternshipSpeciality.objects.all()

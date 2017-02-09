@@ -23,21 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest.mock import patch
-
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 
 from internship.views import student
+from base.tests.models import test_student
 
 
 class StudentTest(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user = User.objects.create_user("user", "user@test.com", "pass")
+        permission = Permission.objects.get(codename="can_access_internship")
+        self.user.user_permissions.add(permission)
+        self.student = test_student.create_student("stud", "std", "45451214")
+        self.student.person.user = self.user
+        self.student.person.save()
 
     def test_access_internship_offers_selection(self):
         url = reverse(student.display_internships_selection)
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
+        self.client.force_login(self.user)
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
