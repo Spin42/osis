@@ -26,7 +26,7 @@
 from django.conf.urls import url
 
 from internship.views import home, internship, master, period, \
-                            place, speciality, student_resume, affectation_statistics
+                            place, speciality, student_resume, affectation_statistics, student
 from internship.utils import upload_xls
 
 urlpatterns = [
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^internships/block/$', internship.internships_block, name='internships_block'),
     url(r'^internships/save/$', internship.internships_save, name='internships_save'),
     url(r'^internships/save/modification/student/$', internship.internship_save_modification_student, name='internship_save_modification_student'),
-    url(r'^internships/std/$', internship.internships_stud, name='internships_stud'),
+    url(r'^internships/std/$', student.internships_stud, name='internships_stud'),
     url(r'^internships/student/([0-9]+)/modification/$', internship.internships_modification_student, name='internships_modification_student'),
     url(r'^internships/upload/$', upload_xls.upload_internships_file,name='upload_internship'),
 

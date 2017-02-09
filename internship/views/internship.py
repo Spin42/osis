@@ -23,15 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, permission_required
-from base import models as mdl
 from collections import OrderedDict
 from math import sin, cos, radians, degrees, acos
 from operator import itemgetter
 
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+from base import models as mdl
 from internship import models as mdl_internship
 
 
@@ -281,74 +282,6 @@ def internships(request):
                                                 'speciality_sort_value': speciality_sort_value,
                                                 'non_mandatory_speciality': all_non_mandatory_speciality,
                                                 })
-
-
-@login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
-def internships_stud(request):
-    # Set the number of non mandatory internship and the sort array depending
-    size_non_mandatory = 5
-    speciality_sort_value = [None] * size_non_mandatory
-
-    # Check if there is a speciality selected in a tab of non mandatory internship
-    if request.method == 'GET':
-        for x in range(1,size_non_mandatory):
-            if request.GET.get("speciality_sort"+str(x)) != '0':
-                speciality_sort_value[x] = request.GET.get("speciality_sort"+str(x))
-            else :
-                speciality_sort_value[x] = None
-
-    # Get the student base on the user
-    student = mdl.student.find_by(person_username=request.user)
-    # Get in descending order the student's choices in first lines
-    student_choice = mdl_internship.internship_choice.find_by_student_desc(student)
-
-    # Select all Internship Offer
-    query = mdl_internship.internship_offer.find_internships()
-
-    # Sort the internships by the organization's reference
-    query = sort_internships(query)
-
-    # Change the query into a list
-    query = list(query)
-    # Delete the internships in query when they are in the student's selection then rebuild the query
-    # Put datas wich need to be save in the student's choice list
-    query = set_student_choices_list(query, student_choice)
-    # Insert the student choice into the global query, at first position,
-    for choice in student_choice:
-        query.insert(0, choice)
-
-    # Get The number of differents choices for the internships
-    get_number_choices(query)
-
-    all_internships = mdl_internship.internship_offer.find_internships()
-    all_speciality = get_all_specialities(all_internships)
-    selectable = get_selectable(all_internships)
-    set_tabs_name(all_speciality, student)
-
-    # Set all non mandatory speciality for the dropdown list
-    all_non_mandatory_speciality = mdl_internship.internship_speciality.find_non_mandatory()
-    # Create an array of the number of non mandatory internship and put all the internship of the speciality selected in
-    all_non_mandatory_internships = [None] * size_non_mandatory
-    all_non_mandatory_selected_internships = [None] * size_non_mandatory
-    for x in range(0,size_non_mandatory):
-        if speciality_sort_value[x]:
-            all_non_mandatory_internships[x] = mdl_internship.internship_offer.find_non_mandatory_internships(speciality__name=speciality_sort_value[x])
-            get_number_choices(all_non_mandatory_internships[x])
-            set_tabs_name(all_non_mandatory_internships[x])
-        else:
-            all_non_mandatory_internships[x] = None
-        all_non_mandatory_selected_internships[x]=mdl_internship.internship_choice.search(internship_choice=x+1)
-
-    return render(request, "internships_stud.html", {'section': 'internship',
-                                                     'all_internships': query,
-                                                     'non_mandatory_speciality': all_non_mandatory_speciality,
-                                                     'all_non_mandatory_internships': all_non_mandatory_internships,
-                                                     'all_non_mandatory_selected_internships': all_non_mandatory_selected_internships,
-                                                     'speciality_sort_value': speciality_sort_value,
-                                                     'all_speciality': all_speciality,
-                                                     'selectable': selectable,
-                                                     })
 
 
 @login_required
