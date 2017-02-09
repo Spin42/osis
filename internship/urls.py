@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^internships/std/$', student.internships_stud, name='internships_stud'),
     url(r'^internships/student/([0-9]+)/modification/$', internship.internships_modification_student, name='internships_modification_student'),
     url(r'^internships/upload/$', upload_xls.upload_internships_file,name='upload_internship'),
+    url(r'^selection/$', student.display_internships_selection, name='internships_selection'),
 
     url(r'^internships_masters/$', master.interships_masters, name='interships_masters'),
     url(r'^internships_masters/delete/$', master.delete_interships_masters, name='delete_interships_masters'),

@@ -76,6 +76,10 @@ def load_internship_students():
         print("Duplication : {}".format(duplication_counter))
 
 
+def display_internships_selection(request):
+    return render(request, "internships_student_selection.html")
+
+
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 def internships_stud(request):
