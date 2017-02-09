@@ -77,7 +77,10 @@ def load_internship_students():
 
 
 def display_internships_selection(request):
-    return render(request, "internships_student_selection.html")
+    NUMBER_NON_MANDATORY_INTERNSHIPS = 6
+
+    return render(request, "internships_student_selection.html",
+                  {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1)})
 
 
 @login_required

@@ -37,7 +37,23 @@
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
-        INTERNSHIPS STUDENT SELECTION
+
+        <form>
+
+            <div class="col-md-3 form-group">
+                <label for="internship_type">Internship</label>
+                <select class="form-control">
+                    {% for non_mandatory_id in number_non_mandatory_internships %}
+                        <option>{% trans 'internship_choice'%} {{ non_mandatory_id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </form>
+       <div class="row">
+
+       </div>
+
     </div>
 </div>
 {% endblock %}
